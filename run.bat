@@ -1,4 +1,6 @@
 @echo off
-REM 파이썬으로 바로 실행 (콘솔 창 없이)
+REM Run Capture PDF with Python (keeps this window open if an error occurs)
+cd /d "%~dp0"
 python -m pip install --quiet pillow
-start "" pythonw capture_pdf.py
+python capture_pdf.py
+if errorlevel 1 pause

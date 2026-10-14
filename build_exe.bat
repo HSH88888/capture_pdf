@@ -1,9 +1,16 @@
 @echo off
-REM Capture PDF 실행 파일(.exe) 만들기
-REM 결과물: dist\CapturePDF.exe
-chcp 65001 > nul
+REM Build CapturePDF.exe  ->  dist\CapturePDF.exe
+cd /d "%~dp0"
 python -m pip install --upgrade pillow pyinstaller
+if errorlevel 1 goto fail
 python -m PyInstaller --noconfirm --onefile --windowed --name CapturePDF capture_pdf.py
+if errorlevel 1 goto fail
 echo.
-echo 완료: dist\CapturePDF.exe
+echo Done: dist\CapturePDF.exe
 pause
+exit /b 0
+:fail
+echo.
+echo [ERROR] Build failed. See the messages above.
+pause
+exit /b 1

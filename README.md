@@ -27,10 +27,17 @@
 pip install -r requirements.txt
 python capture_pdf.py
 ```
-또는 `run.bat` 더블클릭.
+또는 `run.bat` 더블클릭 (오류가 나면 창이 닫히지 않고 메시지를 보여 줍니다).
 
 ### 2) exe 파일로 만들기
 `build_exe.bat` 을 더블클릭하면 `dist\CapturePDF.exe` 가 만들어집니다.
 이 exe 하나만 있으면 파이썬이 없는 PC에서도 실행됩니다.
 
 > 윈도우 시작 시 자동 실행하려면 `Win + R` → `shell:startup` 폴더에 exe 바로가기를 넣으세요.
+
+## 오류가 날 때
+
+- 오류 내용은 대화상자로 표시되고 `%USERPROFILE%\capture_pdf_error.log` 에도 기록됩니다.
+- `'python'은(는) 내부 또는 외부 명령...이 아닙니다` → Python 설치 시 **Add python.exe to PATH** 를 체크하고 다시 설치하세요.
+- `No module named 'PIL'` → `python -m pip install pillow`
+- 단축키가 안 먹음 → 다른 프로그램이 같은 단축키를 사용 중입니다 (상태 표시줄에 표시됨).

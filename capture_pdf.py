@@ -20,13 +20,23 @@ import sys
 import threading
 import time
 import tkinter as tk
+import traceback
 from datetime import datetime
 from tkinter import filedialog, messagebox
 
-from PIL import Image, ImageGrab, ImageTk
+try:
+    from PIL import Image, ImageGrab, ImageTk
+except ImportError:
+    _r = tk.Tk()
+    _r.withdraw()
+    messagebox.showerror("Capture PDF",
+                         "Pillow 패키지가 설치되어 있지 않습니다.\n\n"
+                         "명령 프롬프트에서 다음을 실행하세요:\n    pip install pillow")
+    sys.exit(1)
 
 APP_NAME = "Capture PDF"
 CONFIG_PATH = os.path.join(os.path.expanduser("~"), ".capture_pdf.json")
+ERROR_LOG_PATH = os.path.join(os.path.expanduser("~"), "capture_pdf_error.log")
 DEFAULT_SAVE_DIR = os.path.join(os.path.expanduser("~"), "Documents", "CapturePDF")
 
 IS_WINDOWS = sys.platform == "win32"
@@ -455,11 +465,31 @@ def open_path(path):
         pass
 
 
+def report_error(exc_type, exc, tb):
+    """예상하지 못한 오류를 로그 파일에 남기고 대화상자로 보여 준다."""
+    text = "".join(traceback.format_exception(exc_type, exc, tb))
+    try:
+        with open(ERROR_LOG_PATH, "a", encoding="utf-8") as f:
+            f.write(f"--- {datetime.now():%Y-%m-%d %H:%M:%S} ---\n{text}\n")
+    except OSError:
+        pass
+    try:
+        messagebox.showerror(APP_NAME, f"오류가 발생했습니다:\n\n{text[-1500:]}\n"
+                                       f"로그: {ERROR_LOG_PATH}")
+    except Exception:
+        print(text, file=sys.stderr)
+
+
 def main():
     enable_dpi_awareness()
-    root = tk.Tk()
-    App(root)
-    root.mainloop()
+    try:
+        root = tk.Tk()
+        root.report_callback_exception = report_error
+        App(root)
+        root.mainloop()
+    except Exception:
+        report_error(*sys.exc_info())
+        sys.exit(1)
 
 
 if __name__ == "__main__":

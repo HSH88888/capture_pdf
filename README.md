@@ -33,6 +33,10 @@ python capture_pdf.py
 `build_exe.bat` 을 더블클릭하면 `dist\CapturePDF.exe` 가 만들어집니다.
 이 exe 하나만 있으면 파이썬이 없는 PC에서도 실행됩니다.
 
+### 3) GitHub에서 exe 받기 (CI)
+코드를 올릴 때마다 GitHub Actions가 Windows에서 테스트하고 exe를 자동으로 빌드합니다.
+저장소의 **Actions** 탭 → 최근 실행 → 아래쪽 **Artifacts** 의 `CapturePDF` 를 받아 압축을 풀면 `CapturePDF.exe` 가 있습니다.
+
 > 윈도우 시작 시 자동 실행하려면 `Win + R` → `shell:startup` 폴더에 exe 바로가기를 넣으세요.
 
 ## 오류가 날 때
